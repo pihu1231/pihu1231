@@ -1,0 +1,126 @@
+mysql> Alter table students Add column email varchar(255);
+Query OK, 0 rows affected (1.72 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc students;
++---------+--------------+------+-----+---------+-------+
+| Field   | Type         | Null | Key | Default | Extra |
++---------+--------------+------+-----+---------+-------+
+| ID      | int          | NO   | PRI | NULL    |       |
+| NAME    | varchar(20)  | NO   |     | NULL    |       |
+| AGE     | int          | NO   |     | NULL    |       |
+| ADDRESS | char(25)     | YES  |     | NULL    |       |
+| email   | varchar(255) | YES  |     | NULL    |       |
++---------+--------------+------+-----+---------+-------+
+5 rows in set (0.11 sec)
+
+mysql> Update students set email ='123@gamil.com' where id =1;
+Query OK, 1 row affected (0.16 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> Update students set email ='ads3@gamil.com' where id =2;
+Query OK, 1 row affected (0.16 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> Insert into Students(id,name,age,adress,email) Values(3, 'AKesh', 20, 'Ahmedabad', '23sd@gmail.com');
+ERROR 1054 (42S22): Unknown column 'adress' in 'field list'
+mysql> Insert into Students(id,name,age,address,email) Values(3, 'AKesh', 20, 'Ahmedabad', '23sd@gmail.com');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> Insert into Students(id,name,age,address,email) Values(4, 'Parul', 23, 'gandhi nagar', 'tyud@gmail.com');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> Insert into Students(id,name,age,address,email) Values(5, 'harsh', 24, 'delhi', 'sd@gmail.com');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from students;
++----+-------+-----+------------------------+----------------+
+| ID | NAME  | AGE | ADDRESS                | email          |
++----+-------+-----+------------------------+----------------+
+|  1 | Jaya  |  21 | Jaya@tutorialride.com  | 123@gamil.com  |
+|  2 | aman  |  14 | AMAna@tutorialride.com | ads3@gamil.com |
+|  3 | AKesh |  20 | Ahmedabad              | 23sd@gmail.com |
+|  4 | Parul |  23 | gandhi nagar           | tyud@gmail.com |
+|  5 | harsh |  24 | delhi                  | sd@gmail.com   |
++----+-------+-----+------------------------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> select* from country;
++------------+--------------+-----------+---------------+-------------+
+| country_id | country_name | region_id | continent     | Region_zone |
++------------+--------------+-----------+---------------+-------------+
+|          1 | Thailand     |       100 | South America |           0 |
+|          2 | AFGHANISTAN  |       101 | North Asia    |           0 |
+|          3 | INDIA        |       102 | South Asia    |           0 |
+|          4 | AMERICA      |       104 | Europe        |           0 |
+|          5 | JAPAN        |       105 |  West Korea   |           0 |
++------------+--------------+-----------+---------------+-------------+
+5 rows in set (0.00 sec)
+mysql> Select Country.country_id, Country.country_name , Students.id , students.name
+    -> From Country
+    -> LEFT JOIN Students
+    ->  ON country.country_id = students.id;
++------------+--------------+------+-------+
+| country_id | country_name | id   | name  |
++------------+--------------+------+-------+
+|          1 | Thailand     |    1 | Jaya  |
+|          2 | AFGHANISTAN  |    2 | aman  |
+|          3 | INDIA        |    3 | AKesh |
+|          4 | AMERICA      |    4 | Parul |
+|          5 | JAPAN        |    5 | harsh |
++------------+--------------+------+-------+
+5 rows in set (0.00 sec)
+
+mysql> Select Country.country_id, Country.continent , Students.name , students.age
+    ->  From Country
+    -> Right JOIN students
+    -> ON country.country_id = students.id;
++------------+---------------+-------+-----+
+| country_id | continent     | name  | age |
++------------+---------------+-------+-----+
+|          1 | South America | Jaya  |  21 |
+|          2 | North Asia    | aman  |  14 |
+|          3 | South Asia    | AKesh |  20 |
+|          4 | Europe        | Parul |  23 |
+|          5 |  West Korea   | harsh |  24 |
++------------+---------------+-------+-----+
+5 rows in set (0.00 sec)
+
+mysql> Select Country.country_id, Country.continent , Students.name , students.age
+    -> From Country
+    -> INNER JOIN students
+    -> ON country.country_id = students.id;
++------------+---------------+-------+-----+
+| country_id | continent     | name  | age |
++------------+---------------+-------+-----+
+|          1 | South America | Jaya  |  21 |
+|          2 | North Asia    | aman  |  14 |
+|          3 | South Asia    | AKesh |  20 |
+|          4 | Europe        | Parul |  23 |
+|          5 |  West Korea   | harsh |  24 |
++------------+---------------+-------+-----+
+5 rows in set (0.00 sec)
+mysql> Select Country.country_id, Country.continent , Students.name , students.age
+    -> From Country
+    -> Left Join students
+    -> ON country.country_id = students.id
+    -> Union All
+    ->  Select Country.country_id, Country.continent , Students.name , students.age
+    -> From Country
+    -> Right join students
+    -> ON country.country_id = students.id;
++------------+---------------+-------+------+
+| country_id | continent     | name  | age  |
++------------+---------------+-------+------+
+|          1 | South America | Jaya  |   21 |
+|          2 | North Asia    | aman  |   14 |
+|          3 | South Asia    | AKesh |   20 |
+|          4 | Europe        | Parul |   23 |
+|          5 |  West Korea   | harsh |   24 |
+|          1 | South America | Jaya  |   21 |
+|          2 | North Asia    | aman  |   14 |
+|          3 | South Asia    | AKesh |   20 |
+|          4 | Europe        | Parul |   23 |
+|          5 |  West Korea   | harsh |   24 |
++------------+---------------+-------+------+
+10 rows in set (0.06 sec)
